@@ -36,7 +36,7 @@ def go(writer):
         # site.
         amount = cols[1].text.strip()
         assert amount.startswith("$"), amount
-        amount = amount.replace("$", "").replace(",", "")
+        amount = float(amount.replace("$", "").replace(",", ""))
 
         # Now we go to the grantee page to get information about each individual
         # grant. We only need to do this once for each grantee.
@@ -59,13 +59,14 @@ def go(writer):
 
                 amount_g = d['amount']
                 assert amount_g.startswith("$")
-                amount_g = amount_g.replace("$", "").replace(",", "")
+                amount_g = float(amount_g.replace("$", "").replace(",", ""))
                 if d['fiscal_year'] not in fy_sums[grantee_num]:
                     fy_sums[grantee_num][d['fiscal_year']] = amount_g
                 else:
                     fy_sums[grantee_num][d['fiscal_year']] += amount_g
 
-        assert fy_sums[grantee_num][fiscal_year] == amount
+        assert fy_sums[grantee_num][fiscal_year] == amount, \
+               (grantee, fiscal_year, fy_sums[grantee_num][fiscal_year], amount)
 
 
 if __name__ == "__main__":
