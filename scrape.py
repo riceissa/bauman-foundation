@@ -14,7 +14,7 @@ def main():
         go(writer)
 
 
-def do_grantee(fy_sums, grantee_num):
+def do_grantee(writer, fy_sums, grantee_num, grantee, grantee_url):
     # Now we go to the grantee page to get information about each individual
     # grant. We only need to do this once for each grantee.
     if grantee_num not in fy_sums:
@@ -70,6 +70,8 @@ def go(writer):
         amount = cols[1].text.strip()
         assert amount.startswith("$"), amount
         amount = float(amount.replace("$", "").replace(",", ""))
+
+        do_grantee(writer, fy_sums, grantee_num, grantee, grantee_url)
 
         try:
             assert fy_sums[grantee_num][fiscal_year] == amount, \
