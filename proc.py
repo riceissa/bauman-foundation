@@ -30,19 +30,30 @@ def main():
         affected_regions) values""")
 
         for row in reader:
+            amount = row['amount']
+            assert amount.startswith("$")
+            amount = float(amount.replace("$", "").replace(",", ""))
+
+            # FIXME: convert fiscal years?
+            donation_date = ""
+
+            notes_iter = filter(bool,
+                                [row['grant_type'], row['grant_description']])
+            notes = "; ".join(notes_iter)
+
             print(("    " if first else "    ,") + "(" + ",".join([
-                mysql_quote("MacArthur Foundation"),  # donor
+                mysql_quote("Bauman Foundation"),  # donor
                 mysql_quote(row['grantee']),  # donee
-                amount,  # amount
+                str(amount),  # amount
                 mysql_quote(donation_date),  # donation_date
                 mysql_quote("year"),  # donation_date_precision
                 mysql_quote("donation log"),  # donation_date_basis
                 mysql_quote("FIXME"),  # cause_area
-                mysql_quote("https://www.macfound.org/grants/"),  # url
+                mysql_quote(row['grantee_url']),  # url
                 mysql_quote("FIXME"),  # donor_cause_area_url
-                mysql_quote(row['notes']),  # notes
+                mysql_quote(notes),  # notes
                 mysql_quote("FIXME"),  # affected_countries
-                mysql_quote(row['location']),  # affected_regions
+                mysql_quote("FIXME"),  # affected_regions
             ]) + ")")
             first = False
         print(";")
