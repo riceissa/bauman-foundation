@@ -74,7 +74,11 @@ def go(writer):
                    (grantee, fiscal_year, fy_sums[grantee_num][fiscal_year],
                     amount)
         except AssertionError as e:
-            print(e, file=sys.stderr)
+            print(e.__class__.__name__, e, grantee, grantee_num,
+                  file=sys.stderr)
+        except KeyError as e:
+            print(e.__class__.__name__, e, grantee, grantee_num,
+                  file=sys.stderr)
 
 
 if __name__ == "__main__":
