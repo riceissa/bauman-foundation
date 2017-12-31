@@ -65,8 +65,16 @@ def go(writer):
                 else:
                     fy_sums[grantee_num][d['fiscal_year']] += amount_g
 
-        assert fy_sums[grantee_num][fiscal_year] == amount, \
-               (grantee, fiscal_year, fy_sums[grantee_num][fiscal_year], amount)
+            if not fy_sums[grantee_num]:
+                print("Failed to download grantee page:", grantee,
+                      grantee_num, file=sys.stderr)
+
+        try:
+            assert fy_sums[grantee_num][fiscal_year] == amount, \
+                   (grantee, fiscal_year, fy_sums[grantee_num][fiscal_year],
+                    amount)
+        except AssertionError as e:
+            print(e, file=sys.stderr)
 
 
 if __name__ == "__main__":
