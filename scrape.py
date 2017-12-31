@@ -5,8 +5,16 @@ from bs4 import BeautifulSoup
 import csv
 import sys
 
-
 def main():
+    with open("data.csv", "w", newline="") as f:
+        fieldnames = ["grantee", "grantee_url", "amount", "fiscal_year",
+                      "grant_type", "grant_description"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        go(writer)
+
+
+def go(writer):
     # This is a map:
     # int -> [{fiscal_year, amount, grant_type, grant_description} -> values]
     grantee_dict = {}
@@ -52,6 +60,8 @@ def main():
                   x['amount'] == d['amount']]
         # There should be only one grant matching this
         assert len(l_g) == 1, (grantee_num, l_g)
+        d['grant_type'] = l_g[0]['grant_type']
+        d['grant_description'] = l_g[0]['grant_description']
 
 
 if __name__ == "__main__":
