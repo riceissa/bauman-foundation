@@ -37,9 +37,8 @@ def main():
             # FIXME: convert fiscal years?
             donation_date = ""
 
-            notes_iter = filter(bool,
-                                [row['grant_type'], row['grant_description']])
-            notes = "; ".join(notes_iter)
+            notes = "; ".join(filter(bool,
+                                [row['grant_type'], row['grant_description']]))
 
             print(("    " if first else "    ,") + "(" + ",".join([
                 mysql_quote("Bauman Foundation"),  # donor
